@@ -1,0 +1,32 @@
+# Ignorando carpeta vscode
+/**/.vscode/
+
+#Ignorando todos los archivos que no codigos de python
+
+*.pdf
+*.txt
+*.tex
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.log
+*.out
+*.gz
+*.toc
+*.bib
+*.png
+*.jpg
+*.mp4
+*.mp3
+
+# Ignorando carpetas especificas
+/**/Tarea0/Reporte
+/**/Tarea0/Programa/.ipynb_checkpoints
+/**/Tarea0/.ipynb_checkpoints
+/**/Tarea3/Reporte
+/**/Tarea4/Reporte
+/**/Tarea5/Reporte
+/**/Tarea6/Reporte
+/**/Tarea7/Reporte
+
