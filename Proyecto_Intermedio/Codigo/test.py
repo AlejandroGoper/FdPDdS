@@ -29,8 +29,8 @@ print("                   Señal FDPOAE                   ")
 print("------------------------------------------------------")
 
 try:
-    nombre = input("Ingrese el nombre del archivo a analizar: \n")
-    direccion = "../Archive/"+nombre
+    nombre = input("Ingrese el nombre del archivo .mat a analizar: \n")
+    direccion = "../Archive/"+nombre+".mat"
     print("\nCargando...\n")
     archivo = loadmat(direccion) #Dirección del archivo .mat
 except:
@@ -40,6 +40,7 @@ except:
 # Guardamos en arreglos numpy los datos de los archivos .mat
 data = array(archivo["Data"]) # data es una matriz pero solo queremos un array
 senal = data[0] # asi que solo tomamos la primera posicion
+n = len(senal)
 fs =  float(archivo["fs"]) # Convertimos a escalar float el dato del archivo
 
 print("************************************************************")
@@ -115,8 +116,9 @@ print("------------------------------------------------------")
 print(" -- Graficando espectro -- ")
 print("\n -- Cerrar la grafica para continuar -- ")
 # Graficamos el espectro 
-plt.stem(vfreqpos,amplitud_fft_db)
+plt.stem(vfreqpos_cortada,amplitud_fft_db_cortada)
 plt.title(nombre)
 plt.xlabel("Frecuencia [Hz]")
 plt.ylabel("Amplitud [dB_spl]")
-plt.show()
+plt.savefig(nombre+"_cortada.png")
+#plt.show()
