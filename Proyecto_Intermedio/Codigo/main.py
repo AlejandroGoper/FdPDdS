@@ -41,6 +41,7 @@ except:
 # Guardamos en arreglos numpy los datos de los archivos .mat
 data = array(archivo["Data"]) # data es una matriz pero solo queremos un array
 senal = data[0] # asi que solo tomamos la primera posicion
+n = len(senal)
 fs =  float(archivo["fs"]) # Convertimos a escalar float el dato del archivo
 
 print("************************************************************")
