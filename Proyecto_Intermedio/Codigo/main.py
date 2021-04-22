@@ -22,12 +22,31 @@ import matplotlib.pyplot as plt
 
 #Cargamos archivos
 
-archivo = loadmat("../Archive/11_Datos.mat") #Dirección del archivo .mat
+
+print("------------------------------------------------------")
+print("    Fundamento de procesamiento digital de señales")
+print("                Proyecto Intermedio               ")
+print("                   Señal FDPOAE                   ")
+print("------------------------------------------------------")
+
+try:
+    nombre = input("Ingrese el nombre del archivo a analizar: \n")
+    direccion = "../Archive/"+nombre
+    print("\nCargando...\n")
+    archivo = loadmat(direccion) #Dirección del archivo .mat
+except:
+    print("Ha ocurrido un error al leer el archivo")
+    exit()
+
 # Guardamos en arreglos numpy los datos de los archivos .mat
 data = array(archivo["Data"]) # data es una matriz pero solo queremos un array
 senal = data[0] # asi que solo tomamos la primera posicion
 fs =  float(archivo["fs"]) # Convertimos a escalar float el dato del archivo
 
+print("************************************************************")
+print(f"  Tamaño de los datos: {n}")
+print(f"  Frecuencia de muestreo: {fs} Hz")
+print("************************************************************")
 #Aplicando la fft a la señal 
 fft_senal = fft(senal)
 
@@ -54,14 +73,7 @@ else:
     lim = floor(n/2)+1
 vfreqpos = vfrec[0:int(lim)]
 
-# Graficamos el espectro 
-plt.stem(vfreqpos,amplitud_fft_db)
-plt.title("11_Datos")
-plt.xlabel("Frecuencia [Hz]")
-plt.ylabel("Db_SPL")
-
 # Algoritmo principal
-
 try:
     # Buscamos las dos frecuencias más prominentes en el espectro de Fourier
     f1,f2 = buscar_frecuencias(amplitud_fft_db,vfreqpos,10)
@@ -79,6 +91,7 @@ try:
     # sin tomar en cuenta esa parte del espectro
 
     while(f_DPOAE_teorica < 0):
+
         print("\nEl algoritmo encontro que F_DPOAE es negativa, lo cual viene por una mala elección de")
         print("las frecuencias F_1 y F_2. \n Para corregir esto debemos quitar el ruido de las primeras")
         print("partes del espectro.")
@@ -109,9 +122,7 @@ try:
     # F1 y F2 encontradas 
     dbf1 = amplitud_fft_db[ind_f1]
     dbf2 = amplitud_fft_db[ind_f2] 
-    print(f"Se encontraron:\n F1 = {f1} \t Db-SPL = {dbf1} \n F2 = {f2} \t Db-SPl = {dbf2}")
-    print(f"F_DPOAE_Teorica = {f_DPOAE_teorica}")
-
+    
     # Esta parte del programa encuentra de manera automatica la F_DPOAE experimental
     
     # Primero redondeamos a una cifra decimal el valor teorico obtenido
@@ -123,8 +134,18 @@ try:
     # Ahora, solo resta encontrar el valor máximo entre un intervalo específico de frecuencias
     # eso lo realizamos con la siguiente linea. 
     f_max, f_DPOAE_exp = localizar_maximo_entre([f_DPOAE_teorica_-0.2 , f_DPOAE_teorica_ +0.2],vfreqpos,amplitud_fft_db)
-    print(f"f_DPOAE_exp = {f_max} \t dB_SPL f_DPOAE_exp {f_DPOAE_exp}\n")
     
+    print("\n\n")
+    print("------------------------------------------------------")
+    print("    Resultados: ")
+    print(f"   * F1 = {f1} Hz ")
+    print(f"   * Amplitud F1 = {dbf1} dB_spl")
+    print(f"   * F2 = {f2} Hz ")
+    print(f"   * Amplitud F2 = {dbf2} dB_spl")
+    print(f"   * F_DPOAE_Teorica = {f_DPOAE_teorica} Hz")
+    print(f"   * F_DPOAE_exp = {f_max} Hz ")
+    print(f"   * Amplitud f_DPOAE_exp {f_DPOAE_exp} dB_SPL")
+    print("------------------------------------------------------")
 except:
     # Si llegamos hasta aquí, ha ocurrido un error desconocido en el programa
     # probablemente tiene que ver con una mala elección de F1 y F2.
@@ -159,8 +180,25 @@ except:
     f_DPOAE_teorica = 2*f1 - f2 
     dbf1 = amplitud_fft_db[ind_f1]
     dbf2 = amplitud_fft_db[ind_f2] 
-    print(f"Se encontraron:\n F1 = {f1} \t Db-SPL = {dbf1} \n F2 = {f2} \t Db-SPl = {dbf2}")
-    print(f"F_DPOAE_Teorica = {f_DPOAE_teorica}")
     f_DPOAE_teorica_ = round(f_DPOAE_teorica,1)
     f_max, f_DPOAE_exp = localizar_maximo_entre([f_DPOAE_teorica_-0.2 , f_DPOAE_teorica_ +0.2],vfreqpos,amplitud_fft_db)
-    print(f"f_DPOAE_exp = {f_max} \t dB_SPL f_DPOAE_exp {f_DPOAE_exp}\n")
+    print("\n\n")
+    print("------------------------------------------------------")
+    print("    Resultados: ")
+    print(f"   * F1 = {f1} Hz ")
+    print(f"   * Amplitud F1 = {dbf1} dB_spl")
+    print(f"   * F2 = {f2} Hz ")
+    print(f"   * Amplitud F1 = {dbf2} dB_spl")
+    print(f"   * F_DPOAE_Teorica = {f_DPOAE_teorica} Hz")
+    print(f"   * F_DPOAE_exp = {f_max} Hz ")
+    print(f"   * Amplitud f_DPOAE_exp {f_DPOAE_exp} dB_SPL")
+    print("------------------------------------------------------")
+    
+print(" -- Graficando espectro -- ")
+print("\n -- Cerrar la grafica para continuar -- ")
+# Graficamos el espectro 
+plt.stem(vfreqpos,amplitud_fft_db)
+plt.title(nombre)
+plt.xlabel("Frecuencia [Hz]")
+plt.ylabel("Amplitud [dB_spl]")
+plt.show()
